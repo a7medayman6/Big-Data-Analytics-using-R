@@ -32,7 +32,6 @@ colnames(zipincome)
 
 # Print the summary of the zeta table to analyze
 summary(zipincome)
-
 # Plot the zipcode against the income in a scatter plot
 plot(x = zipincome$zipCode,
      y = zipincome$income,
@@ -42,6 +41,7 @@ plot(x = zipincome$zipCode,
 
 # Ommit outliers, by limiting the income to 7000 > income > 200,000
 zipincome_omitted <- zipincome[(zipincome$income > 7000 & zipincome$income < 200000),]
+
 # Number of rows before ommitting outliers
 nrow(zipincome)
 # Number of rows after ommitting outliers
@@ -91,8 +91,8 @@ fviz_cluster(object = list(data=x_sc,cluster=k_out$cluster))
 # Visualize the Elbow to find a more suitable K value
 fviz_nbclust(x_sc, kmeans, method="wss") + labs(subtitle="Elbow method")
 
-# Calculate K-means with k = 5 and visualize the clusters alongside their centroids
-k_out_2 <- kmeans(x_sc, 5, 25)
+# Calculate K-means with k = 8 and visualize the clusters alongside their centroids
+k_out_2 <- kmeans(x_sc, 8, 25)
 fviz_cluster(object = list(data=x_sc,cluster=k_out_2$cluster))
 
 
@@ -102,8 +102,8 @@ x_lg
 
 x_lg_sc <- scale(x_lg)
 x_lg_sc
-# Calculate K-means with k = 5 and visualize the clusters alongside their centroids
-k_out_3 <- kmeans(x_lg_sc, 5, 25)
+# Calculate K-means with k = 8 and visualize the clusters alongside their centroids
+k_out_3 <- kmeans(x_lg_sc, 8, 25)
 fviz_cluster(object = list(data=x_lg_sc,cluster=k_out_3$cluster))
 
 
@@ -113,11 +113,18 @@ plot(x = x_lg$Mean_Household_Income,
      xlab = "Mean Household Income",
      ylab = "Mean Electricity Usage",	 
      main = "Mean Household Income VS Mean Electricity Usage")
-# found outliers at Mean_Electricity_Usage > 2.83
+# found outliers at Mean_Household_Income > 4.85
 
-x_lg_om <- x_lg[(x_lg$Mean_Electricity_Usage > 2.83) ,]
+x_lg_om <- x_lg[(x_lg$Mean_Household_Income < 4.85) ,]
 x_lg_om_sc <- scale(x_lg_om)
 head(x_lg_om_sc)
+
+# Plot the data to make sure deleted outliers
+plot(x = x_lg_om$Mean_Household_Income,
+     y = x_lg_om$Mean_Electricity_Usage,
+     xlab = "Mean Household Income",
+     ylab = "Mean Electricity Usage",	 
+     main = "Mean Household Income VS Mean Electricity Usage")
 
 # Visualize the Elbow to find a more suitable K value
 fviz_nbclust(x_lg_om_sc, kmeans, method="wss") + labs(subtitle="Elbow method")
